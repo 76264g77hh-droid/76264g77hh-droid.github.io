@@ -3,10 +3,471 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的网页</title>
+  <title>桂湘苑 — 湘桂融合料理</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #8B1A1A;
+      --gold: #C9972A;
+      --gold-light: #E8C96A;
+      --cream: #FAF6EE;
+      --dark: #1A0F0A;
+      --text: #3D2B1F;
+      --text-light: #7A6354;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+ 
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(26,15,10,0.92);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+    }
+    .nav-links { display: flex; gap: 2.5rem; }
+    .nav-links a {
+      text-decoration: none; color: #c9b49a;
+      font-size: 0.88rem; letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+ 
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding-top: 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(139,26,26,0.3) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(201,151,42,0.15) 0%, transparent 50%);
+    }
+    .hero-pattern {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image: repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);
+      background-size: 20px 20px;
+    }
+    .hero-content {
+      position: relative; text-align: center;
+      animation: fadeUp 1.2s ease both;
+    }
+    .hero-sub {
+      font-size: 0.8rem; letter-spacing: 0.4em;
+      color: var(--gold); text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 700; color: #fff;
+      line-height: 1; letter-spacing: 0.05em;
+      text-shadow: 0 0 80px rgba(201,151,42,0.3);
+    }
+    .hero-title span { color: var(--gold-light); }
+    .hero-desc {
+      margin-top: 2rem; font-size: 1rem;
+      color: #c9b49a; letter-spacing: 0.08em;
+      line-height: 1.8;
+    }
+    .hero-divider {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 2rem auto;
+    }
+    .hero-btn {
+      display: inline-block; margin-top: 1rem;
+      padding: 0.9rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold-light); text-decoration: none;
+      font-size: 0.85rem; letter-spacing: 0.15em;
+      transition: all 0.3s;
+    }
+    .hero-btn:hover {
+      background: var(--gold); color: var(--dark);
+    }
+ 
+    /* SECTION BASE */
+    section { padding: 6rem 2rem; }
+    .section-label {
+      text-align: center;
+      font-size: 0.75rem; letter-spacing: 0.4em;
+      color: var(--gold); text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; text-align: center;
+      color: var(--text); margin-bottom: 1rem;
+    }
+    .section-line {
+      width: 50px; height: 2px;
+      background: var(--gold);
+      margin: 0 auto 3.5rem;
+    }
+ 
+    /* ABOUT */
+    .about { background: #fff; }
+    .about-inner {
+      max-width: 800px; margin: 0 auto;
+      text-align: center;
+    }
+    .about-text {
+      font-size: 1.05rem; line-height: 2;
+      color: var(--text-light);
+    }
+    .about-text strong { color: var(--red); font-weight: 600; }
+    .about-tags {
+      display: flex; justify-content: center;
+      gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem;
+    }
+    .about-tag {
+      padding: 0.5rem 1.4rem;
+      border: 1px solid var(--gold);
+      color: var(--gold); font-size: 0.82rem;
+      letter-spacing: 0.1em;
+    }
+ 
+    /* MENU */
+    .menu { background: var(--cream); }
+    .menu-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .menu-category {
+      background: #fff;
+      border-top: 3px solid var(--gold);
+      padding: 2rem;
+    }
+    .menu-cat-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--red); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .menu-cat-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: #eee;
+    }
+    .menu-item {
+      display: flex; justify-content: space-between;
+      align-items: baseline; padding: 0.7rem 0;
+      border-bottom: 1px dashed #eee;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item-name { font-size: 0.95rem; color: var(--text); }
+    .menu-item-desc { font-size: 0.78rem; color: var(--text-light); margin-top: 2px; }
+    .menu-item-price {
+      font-family: 'Noto Serif SC', serif;
+      color: var(--red); font-weight: 600;
+      font-size: 1rem; white-space: nowrap; margin-left: 1rem;
+    }
+ 
+    /* STORY */
+    .story { background: var(--dark); color: #fff; }
+    .story .section-title { color: #fff; }
+    .story-inner {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .story-text { font-size: 0.95rem; line-height: 2; color: #c9b49a; }
+    .story-text p { margin-bottom: 1.2rem; }
+    .story-text strong { color: var(--gold-light); }
+    .story-visual {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .story-card {
+      background: rgba(201,151,42,0.08);
+      border: 1px solid rgba(201,151,42,0.2);
+      padding: 1.5rem 1rem; text-align: center;
+    }
+    .story-card-num {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--gold-light);
+    }
+    .story-card-label {
+      font-size: 0.78rem; color: #a08878;
+      margin-top: 0.3rem; letter-spacing: 0.05em;
+    }
+ 
+    /* CONTACT */
+    .contact { background: #fff; }
+    .contact-inner {
+      max-width: 800px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .contact-block h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1rem; color: var(--red);
+      margin-bottom: 1rem; letter-spacing: 0.05em;
+    }
+    .contact-block p {
+      font-size: 0.92rem; line-height: 1.9;
+      color: var(--text-light);
+    }
+    .contact-block a {
+      color: var(--gold); text-decoration: none;
+    }
+    .contact-block a:hover { text-decoration: underline; }
+ 
+    /* FOOTER */
+    footer {
+      background: var(--dark); color: #6a5a50;
+      text-align: center; padding: 2rem;
+      font-size: 0.8rem; letter-spacing: 0.05em;
+    }
+    footer span { color: var(--gold); }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+ 
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .story-inner, .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      section { padding: 4rem 1.5rem; }
+    }
+  </style>
 </head>
 <body>
-  <h1>你好，世界！</h1>
-  <p>这是我的第一个网页。</p>
+ 
+<nav>
+  <div class="nav-logo">桂湘苑</div>
+  <div class="nav-links">
+    <a href="#about">关于我们</a>
+    <a href="#menu">特色菜单</a>
+    <a href="#story">餐厅故事</a>
+    <a href="#contact">联系我们</a>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <p class="hero-sub">湘桂融合 · 正宗风味</p>
+    <h1 class="hero-title"><span>桂</span>湘苑</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">广西风味与湖南料理的完美交汇<br>一桌家宴，两地乡情</p>
+    <a href="#menu" class="hero-btn">探索菜单</a>
+  </div>
+</section>
+ 
+<!-- ABOUT -->
+<section class="about" id="about">
+  <p class="section-label">关于我们</p>
+  <h2 class="section-title">融汇两地精华</h2>
+  <div class="section-line"></div>
+  <div class="about-inner">
+    <p class="about-text">
+      桂湘苑以<strong>广西桂菜</strong>与<strong>湖南湘菜</strong>为灵魂，精选两地时令食材，
+      用传统工艺与匠心调配，呈现一桌兼具辣香鲜爽的融合盛宴。
+      无论是桂林米粉的细腻汤底，还是湘西腊味的浓郁烟熏，
+      每一道菜都承载着真实的地方记忆与家的温度。
+    </p>
+    <div class="about-tags">
+      <span class="about-tag">现炒现做</span>
+      <span class="about-tag">精选食材</span>
+      <span class="about-tag">湘辣鲜香</span>
+      <span class="about-tag">桂味清爽</span>
+      <span class="about-tag">家宴包厢</span>
+    </div>
+  </div>
+</section>
+ 
+<!-- MENU -->
+<section class="menu" id="menu">
+  <p class="section-label">特色菜单</p>
+  <h2 class="section-title">招牌料理</h2>
+  <div class="section-line"></div>
+  <div class="menu-grid">
+ 
+    <div class="menu-category">
+      <div class="menu-cat-title">🌶 湘味招牌</div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">剁椒鱼头</div>
+          <div class="menu-item-desc">湖南传统名菜，鲜辣入味</div>
+        </div>
+        <div class="menu-item-price">¥68</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">湘西腊肉炒蒜苗</div>
+          <div class="menu-item-desc">自制烟熏腊肉，香气浓郁</div>
+        </div>
+        <div class="menu-item-price">¥48</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">毛氏红烧肉</div>
+          <div class="menu-item-desc">肥而不腻，入口即化</div>
+        </div>
+        <div class="menu-item-price">¥58</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">农家小炒肉</div>
+          <div class="menu-item-desc">地道湘味，辣香下饭</div>
+        </div>
+        <div class="menu-item-price">¥42</div>
+      </div>
+    </div>
+ 
+    <div class="menu-category">
+      <div class="menu-cat-title">🍜 桂味经典</div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">桂林卤粉</div>
+          <div class="menu-item-desc">秘制卤汤，米粉劲道</div>
+        </div>
+        <div class="menu-item-price">¥28</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">柳州螺蛳粉</div>
+          <div class="menu-item-desc">酸辣鲜香，回味无穷</div>
+        </div>
+        <div class="menu-item-price">¥32</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">白切鸡</div>
+          <div class="menu-item-desc">广西土鸡，皮滑肉嫩</div>
+        </div>
+        <div class="menu-item-price">¥68</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">荔浦芋扣肉</div>
+          <div class="menu-item-desc">荔浦特产芋头，软糯甘香</div>
+        </div>
+        <div class="menu-item-price">¥52</div>
+      </div>
+    </div>
+ 
+    <div class="menu-category">
+      <div class="menu-cat-title">🥗 时蔬汤品</div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">老火靓汤</div>
+          <div class="menu-item-desc">每日熬制，营养醇厚</div>
+        </div>
+        <div class="menu-item-price">¥38</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">清炒时蔬</div>
+          <div class="menu-item-desc">当季新鲜蔬菜</div>
+        </div>
+        <div class="menu-item-price">¥22</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">蒜蓉炒空心菜</div>
+          <div class="menu-item-desc">爽脆清香，家常美味</div>
+        </div>
+        <div class="menu-item-price">¥22</div>
+      </div>
+      <div class="menu-item">
+        <div>
+          <div class="menu-item-name">酸辣土豆丝</div>
+          <div class="menu-item-desc">湘桂共爱的经典小炒</div>
+        </div>
+        <div class="menu-item-price">¥24</div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- STORY -->
+<section class="story" id="story">
+  <p class="section-label" style="color:var(--gold);">餐厅故事</p>
+  <h2 class="section-title">一段关于家乡味道的旅程</h2>
+  <div class="section-line"></div>
+  <div class="story-inner">
+    <div class="story-text">
+      <p>桂湘苑由一对来自<strong>广西与湖南</strong>的夫妇共同创立。
+      他们相识于异乡，却都深深眷恋故土的味道。</p>
+      <p>创始人将两地最具代表性的食材与烹饪技法融为一炉，
+      历经数年摸索，终于调配出属于<strong>桂湘苑</strong>独有的风味体系。</p>
+      <p>每一道菜，都是对家乡的思念；每一次入座，都是一场归途。
+      我们相信，好的食物能跨越地域，连接人心。</p>
+    </div>
+    <div class="story-visual">
+      <div class="story-card">
+        <div class="story-card-num">10+</div>
+        <div class="story-card-label">年烹饪经验</div>
+      </div>
+      <div class="story-card">
+        <div class="story-card-num">50+</div>
+        <div class="story-card-label">道特色菜品</div>
+      </div>
+      <div class="story-card">
+        <div class="story-card-num">2</div>
+        <div class="story-card-label">地风味融合</div>
+      </div>
+      <div class="story-card">
+        <div class="story-card-num">∞</div>
+        <div class="story-card-label">家的温度</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <p class="section-label">联系我们</p>
+  <h2 class="section-title">欢迎光临</h2>
+  <div class="section-line"></div>
+  <div class="contact-inner">
+    <div class="contact-block">
+      <h3>📍 店铺地址</h3>
+      <p>Lingkaran SV, Sunway Velocity,<br>55100 Kuala Lumpur</p>
+      <br>
+      <h3>🕐 营业时间</h3>
+      <p>午餐：11:00 — 14:00<br>晚餐：17:00 — 21:30<br>每周一至周日营业</p>
+    </div>
+    <div class="contact-block">
+      <h3>📞 预订电话</h3>
+      <p>0888888888<br>
+      <a href="tel:0888888888">点击拨打</a></p>
+      <br>
+      <h3>💬 微信预约</h3>
+      <p>可提前预约包厢及家宴<br>欢迎团体订餐</p>
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  <p>© 2026 <span>桂湘苑</span> · 湘桂融合料理 · 用心烹饪每一餐</p>
+</footer>
+ 
 </body>
 </html>
